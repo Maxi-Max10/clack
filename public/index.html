@@ -711,5 +711,25 @@
 <script src="plugins/video-js/Youtube.min.js"></script>
 <script src="plugins/parallax-js-master/parallax.min.js"></script>
 <script src="js/custom.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const userBar = document.getElementById('user-bar');
+  const token = localStorage.getItem('token');
+  if (token) {
+    // Decodifica el token para obtener el username
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    userBar.innerHTML = `
+      <ul>
+        <li style="font-weight:bold;color:#28a745;">${payload.username}</li>
+        <li><a href="#" id="logout-btn">Cerrar sesión</a></li>
+      </ul>
+    `;
+    document.getElementById('logout-btn').onclick = function() {
+      localStorage.removeItem('token');
+      location.reload();
+    };
+  }
+});
+</script>
 </body>
 </html>

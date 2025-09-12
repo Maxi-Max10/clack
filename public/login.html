@@ -1,61 +1,116 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-        <title>Login - Dialog</title>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles/login.css">
-    </head>
-    <body>
-        <div class="main">
-            <div class="container a-container" id="a-container">
-                <form id="a-form" class="form" method="POST" action="/register">
-                    <div class="form__icons form__icons--topright">
-                        <img class="form__icon" src="images/logo1.png" alt="icon">
-                    </div>
-                    <h2 class="form_title title">Crear cuenta</h2>
 
-                    <span class="form__span">o usa tu email para registrarte</span>
-                    <input class="form__input" type="text" placeholder="Nombre" />
-                    <input class="form__input" type="text" placeholder="Email" />
-                    <input class="form__input" type="password" placeholder="Contraseña" />
-                    <button class="form__button button submit">REGISTRARSE</button>
-                </form>
-            </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <title>Login - Dialog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/login.css">
+</head>
 
-            <div class="container b-container" id="b-container">
-                <form id="b-form" class="form" method="POST" action="/login">
-                    <div class="form__icons form__icons--topright">
-                        <img class="form__icon" src="images/logo1.png" alt="icon">
-                    </div>
-                    <h2 class="form_title title">Iniciar sesión</h2>
-                    <span class="form__span">o usa tu cuenta de correo</span>
-                    <input class="form__input" type="text" placeholder="Email" />
-                    <input class="form__input" type="password" placeholder="Contraseña" />
-                    <a class="form__link" href="#">¿Olvidaste tu contraseña?</a>
-                    <button class="form__button button submit">ENTRAR</button>
-                </form>
-            </div>
-
-            <div class="switch" id="switch-cnt">
-                <div class="switch__circle"></div>
-                <div class="switch__circle switch__circle--t"></div>
-
-                <div class="switch__container" id="switch-c1">
-                    <h2 class="switch__title title">¡Bienvenido!</h2>
-                    <p class="switch__description description">Para mantenerte conectado con nosotros, inicia sesión con tus datos.</p>
-                    <button class="switch__button button switch-btn">ENTRAR</button>
-                </div>
-
-                <div class="switch__container is-hidden" id="switch-c2">
-                    <h2 class="switch__title title">¡Hola!</h2>
-                    <p class="switch__description description">Ingresa tus datos personales y comienza tu recorrido con nosotros.</p>
-                    <button class="switch__button button switch-btn">REGISTRARSE</button>
-                </div>
-            </div>
+<body>
+  <div class="main">
+    <div class="container a-container" id="a-container">
+      <form id="a-form" class="form" method="POST" action="/register">
+        <div class="form__icons form__icons--topright">
+          <img class="form__icon" src="images/logo1.png" alt="icon">
         </div>
+        <h2 class="form_title title">Crear cuenta</h2>
 
-        <script src="js/login.js"></script>
-    </body>
-    </html>
+        <span class="form__span">o usa tu email para registrarte</span>
+        <input class="form__input" type="text" placeholder="Nombre" />
+        <input class="form__input" type="text" placeholder="Email" />
+        <input class="form__input" type="password" placeholder="Contraseña" />
+        <button class="form__button button submit">REGISTRARSE</button>
+      </form>
+    </div>
+
+    <div class="container b-container" id="b-container">
+      <form id="b-form" class="form" method="POST" action="/login">
+        <div class="form__icons form__icons--topright">
+          <img class="form__icon" src="images/logo1.png" alt="icon">
+        </div>
+        <h2 class="form_title title">Iniciar sesión</h2>
+        <span class="form__span">o usa tu cuenta de correo</span>
+        <input class="form__input" type="text" id="username" placeholder="Email" />
+        <input class="form__input" type="password" id="password" placeholder="Contraseña" />
+        <a class="form__link" href="#">¿Olvidaste tu contraseña?</a>
+        <button class="form__button button submit" type="button" onclick="login()">ENTRAR</button>
+      </form>
+    </div>
+
+    <div class="switch" id="switch-cnt">
+      <div class="switch__circle"></div>
+      <div class="switch__circle switch__circle--t"></div>
+
+      <div class="switch__container" id="switch-c1">
+        <h2 class="switch__title title">¡Bienvenido!</h2>
+        <p class="switch__description description">Para mantenerte conectado con nosotros, inicia sesión con tus
+          datos.</p>
+        <button class="switch__button button switch-btn">ENTRAR</button>
+      </div>
+
+      <div class="switch__container is-hidden" id="switch-c2">
+        <h2 class="switch__title title">¡Hola!</h2>
+        <p class="switch__description description">Ingresa tus datos personales y comienza tu recorrido con
+          nosotros.</p>
+        <button class="switch__button button switch-btn">REGISTRARSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agrega este div para el popup en tu login.html -->
+  <div id="login-success-popup"
+    style="display:none;position:fixed;top:20px;right:20px;background:#28a745;color:#fff;padding:16px;border-radius:8px;z-index:999;font-weight:bold;">
+    ¡Logado con éxito!
+  </div>
+
+  <script src="js/login.js"></script>
+  <script>
+    function login() {
+      const usernameOrEmail = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernameOrEmail, password })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            localStorage.setItem('token', data.token);
+            // Muestra el popup verde
+            const popup = document.getElementById('login-success-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+              popup.style.display = 'none';
+              window.location.href = 'index.html';
+            }, 1500); // 1.5 segundos antes de redirigir
+          } else {
+            alert('Usuario o contraseña incorrectos');
+          }
+        });
+    }
+
+    function authenticateToken(req, res, next) {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1];
+      if (!token) return res.sendStatus(401);
+
+      jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+      });
+    }
+
+    // Ejemplo de ruta protegida
+    app.get('/api/privada', authenticateToken, (req, res) => {
+      res.json({ mensaje: 'Acceso autorizado', usuario: req.user });
+    });
+  </script>
+</body>
+
+</html>
